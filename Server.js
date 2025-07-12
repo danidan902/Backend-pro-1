@@ -8,7 +8,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001
 
-app.use(cors());
+app.use(cors({
+  origin: "https://frontend-personal-pro-6e1b.vercel.app/",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+  credentials: true
+}));
 app.use(express.json());
 
 // db config
