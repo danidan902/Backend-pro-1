@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from 'dotenv'
 import Contact from "./models/Contact.js";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
  
 dotenv.config();
 const app = express();
@@ -41,6 +42,35 @@ app.post('/api/register', async (req, res) => {
       res.status(500).json({success: false, message: "Sometime went wrong!"})
   }
 })
+
+
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await Contact.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ success: false, message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: "Invalid password" });
+    }
+      
+    res.status(200).json({
+      success: true,    
+      message: "Login successful",
+      user: {
+        name: user.name,
+        email: user.email
+      }
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 
 
 app.listen(PORT, () => {
