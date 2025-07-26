@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5001
 
 app.use(cors({
-  origin: "https://danidanportfolio.vercel.app",
+  origin: "https://daniregistration.vercel.app",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
   credentials: true
